@@ -12,14 +12,7 @@ jobs:
 
     - name: Set up MemKernel as a module (M-OUT) with specified name
       run: |
-        curl -LSs "https://raw.githubusercontent.com/Poko-Apps/MemKernel/main/kernel/setup.sh" | bash -s M myname
-
-
-    - name: Set up Clang Compiler
-      run: |
-        sudo apt update
-        sudo apt install -y clang llvm
-
+        curl -LSs "https://raw.githubusercontent.com/Poko-Apps/MemKernel/main/kernel/setup.sh" | bash -s M memek
     - name: Android kernel build
       uses: lemniskett/android-kernel-actions@master
       id: build
@@ -27,14 +20,14 @@ jobs:
         NAME: Loganysl
       with:
         arch: arm64
-        compiler: clang
+        compiler: gcc/12
         defconfig: gki_defconfig
         image: Image.gz-dtb
 
     - name: Upload Kernel and Module
       uses: actions/upload-artifact@v4
       with:
-        name: moduleKernel
+        name: module
         path: |
           ${{ steps.build.outputs.outfile }}
           ./out/drivers/memkernel/memkernel.ko
